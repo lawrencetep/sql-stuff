@@ -1,0 +1,72 @@
+-- Clear existing
+CREATE DATABASE IF NOT EXISTS moviedb;
+USE moviedb; 
+DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS stars;
+DROP TABLE IF EXISTS stars_in_movies;
+DROP TABLE IF EXISTS genres;
+DROP TABLE IF EXISTS genres_in_movies;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS sales;
+DROP TABLE IF EXISTS creditcards;
+DROP TABLE IF EXISTS ratings;
+
+
+
+CREATE TABLE movies (
+	id VARCHAR(10) PRIMARY KEY NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    year INT NOT NULL,
+    director VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE stars (
+	id VARCHAR(10) PRIMARY KEY NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    birthYear INT
+);
+
+CREATE TABLE stars_in_movies (
+	starID VARCHAR(10) NOT NULL REFERENCES stars.id, 
+    movieID VARCHAR(10) NOT NULL REFERENCES movies.id
+);
+
+CREATE TABLE genres (
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE genres_in_movies (
+	genreId INT NOT NULL REFERENCES genres.id,
+    movieID VARCHAR(10) NOT NULL REFERENCES movies.id
+);
+
+CREATE TABLE customers (
+	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY ,
+    firstName VARCHAR(50) NOT NULL, 
+    lastName VARCHAR(50) NOT NULL,
+    ccID VARCHAR(20) NOT NULL REFERENCES creditcards.id,
+    address VARCHAR(200) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE sales (
+	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    customerID INT NOT NULL REFERENCES customers.id,
+    movieId VARCHAR(10) NOT NULL REFERENCES movies.id,
+    saleDate DATE NOT NULL
+);
+
+CREATE TABLE creditcards (
+	id VARCHAR(20) NOT NULL PRIMARY KEY,
+    firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    expiration DATE NOT NULL
+);
+
+CREATE TABLE ratings (
+	movieID VARCHAR(10) NOT NULL REFERENCES movies.id,
+    rating FLOAT NOT NULL,
+    numVotes INT NOT NULL
+);
